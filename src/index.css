@@ -1,0 +1,83 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  font-weight: 400;
+  background-color: slategray;
+}
+
+.css-11kybd2-MuiTypography-root {
+  font-family: "Nunito", sans-serif !important;
+  font-weight: 500 !important;
+}
+
+.header-container {
+  padding: 50px;
+  text-align: center;
+}
+
+.header-container h2 {
+  color: #fff;
+}
+
+.Password-body {
+  box-shadow: 3px 5px 17px #bdb3b3;
+  /* box-shadow: 3px 1px 20px 5px #3b2b2b; */
+  width: 40%;
+  padding: 20px;
+  margin: 50px auto;
+  color: #fff;
+}
+
+.Password-options div {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.Password-holder {
+  display: flex;
+  padding: 10px 5px;
+  background-color: #b4b4d2;
+  align-items: center;
+  border-radius: 5px;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.Password-input {
+  width: 90%;
+}
+
+.Password-input input {
+  width: 95%;
+  height: 26px;
+  background-color: #b4b4d2;
+  border: none;
+  color: #fff;
+  font-size: 15px;
+}
+
+.copy-icon svg {
+  width: 35px;
+  height: 35px;
+  padding-right: 10px;
+}
+
+button {
+  border: none;
+  padding: 10px 20px;
+  background-color: #b4b4d2;
+  border-radius: 20px;
+  color: #fff;
+  margin-top: 20px;
+}
+
+.alert {
+  color: #fff;
+}
