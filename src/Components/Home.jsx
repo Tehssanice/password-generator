@@ -5,7 +5,62 @@ import { IoCopyOutline } from "react-icons/io5";
 export default function Home() {
   const [textToCopy, setTextToCopy] = useState(""); // The text you want to copy
   const [copyStatus, setCopyStatus] = useState(false); // To indicate if the text was copied
-  const [errorMessage, setErrorMessage] = useState(""); // To hold error message if there is  no text to copy
+  const [errorMessage, setErrorMessage] = useState(""); // To hold error message if no text to copy
+  const [length, setLength] = useState(""); // Default length
+  const [randomString, setRandomString] = useState("");
+  const [useUppercase, setUseUppercase] = useState(false); // State for uppercase checkbox
+  const [useLowercase, setUseLowercase] = useState(false); // State for lowercase checkbox
+  const [useNumbers, setUseNumbers] = useState(false); // State for numbers checkbox
+  const [useSymbols, setUseSymbols] = useState(false);
+
+  const generateRandomString = (length) => {
+    let result = "";
+    let characters = "";
+
+    if (useUppercase) characters += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if (useLowercase) characters += "abcdefghijklmnopqrstuvwxyz";
+    if (useNumbers) characters += "0123456789";
+    if (useSymbols) characters += "!@#$%^&*()*+,-./:;<=>?@";
+
+    // Default to lowercase letters if no checkboxes are selected
+    if (characters === "") characters = "abcdefghijklmnopqrstuvwxyz";
+
+    for (let i = 0; i < length; i++) {
+      const randomInd = Math.floor(Math.random() * characters.length);
+      result += characters.charAt(randomInd);
+    }
+    return result;
+  };
+
+  const handleGenerate = () => {
+    const validatedLength = Math.max(8, Math.min(length, 20)); // Ensure length is between 8 and 20
+    const newString = generateRandomString(validatedLength);
+    setRandomString(newString);
+    setTextToCopy(newString);
+  };
+
+  const handleLengthChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (value >= 8 && value <= 20) {
+      setLength(value);
+    }
+  };
+
+  const handleUppercaseChange = (e) => {
+    setUseUppercase(e.target.checked);
+  };
+
+  const handleLowercaseChange = (e) => {
+    setUseLowercase(e.target.checked);
+  };
+
+  const handleNumbersChange = (e) => {
+    setUseNumbers(e.target.checked);
+  };
+
+  const handleSymbolsChange = (e) => {
+    setUseSymbols(e.target.checked);
+  };
 
   const onCopyText = () => {
     if (textToCopy.trim() === "") {
@@ -46,28 +101,27 @@ export default function Home() {
         <div className="Password-options">
           <div>
             <p>Password Length</p>
-            <input type="number" min="8" max="20" />
+            <input type="number" min="8" max="20" value={length} onChange={handleLengthChange} />
           </div>
           <div>
             <p>Uppercase(A-Z)</p>
-            <input type="checkbox" />
+            <input type="checkbox" checked={useUppercase} onChange={handleUppercaseChange} />
           </div>
           <div>
             <p>Lowercase(a-z)</p>
-            <input type="checkbox" />
+            <input type="checkbox" checked={useLowercase} onChange={handleLowercaseChange} />
           </div>
-
           <div>
             <p>Numbers(0-9)</p>
-            <input type="checkbox" />
+            <input type="checkbox" checked={useNumbers} onChange={handleNumbersChange} />
           </div>
           <div>
             <p>Symbols(&-#)</p>
-            <input type="checkbox" />
+            <input type="checkbox" checked={useSymbols} onChange={handleSymbolsChange} />
           </div>
         </div>
 
-        <button>Generate Password</button>
+        <button onClick={handleGenerate}>Generate Password</button>
       </div>
     </div>
   );
