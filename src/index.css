@@ -51,15 +51,16 @@ body {
 }
 
 .Password-input {
-  width: 90%;
+  width: 50%;
 }
 
 .Password-input input {
   width: 95%;
   height: 26px;
-  background-color: #b4b4d2;
+  background-color: transparent;
   border: none;
-  color: #fff;
+  border-radius: 7px;
+  padding: 16px;
   font-size: 15px;
 }
 
@@ -67,15 +68,16 @@ body {
   width: 35px;
   height: 35px;
   padding-right: 10px;
+  color: #5454bd;
 }
 
 button {
   border: none;
   padding: 10px 20px;
-  background-color: #b4b4d2;
-  border-radius: 20px;
+  background-color: #5454bd;
+  border-radius: 6px;
   color: #fff;
-  margin-top: 20px;
+  margin-left: 6px;
 }
 
 .alert {

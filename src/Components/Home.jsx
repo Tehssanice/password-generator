@@ -3,38 +3,65 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { IoCopyOutline } from "react-icons/io5";
 
 export default function Home() {
-  const [textToCopy, setTextToCopy] = useState(""); // The text you want to copy
-  const [copyStatus, setCopyStatus] = useState(false); // To indicate if the text was copied
-  const [errorMessage, setErrorMessage] = useState(""); // To hold error message if no text to copy
-  const [length, setLength] = useState(""); // Default length
+  const [textToCopy, setTextToCopy] = useState("");
+  const [copyStatus, setCopyStatus] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [length, setLength] = useState("");
+  const [lengthErrorMessage, setLengthErrorMessage] = useState(""); // To hold length error message
   const [randomString, setRandomString] = useState("");
-  const [useUppercase, setUseUppercase] = useState(false); // State for uppercase checkbox
-  const [useLowercase, setUseLowercase] = useState(false); // State for lowercase checkbox
-  const [useNumbers, setUseNumbers] = useState(false); // State for numbers checkbox
-  const [useSymbols, setUseSymbols] = useState(false);
+  const [useUppercase, setUseUppercase] = useState(true);
+  const [useLowercase, setUseLowercase] = useState(true);
+  const [useNumbers, setUseNumbers] = useState(true);
+  const [useSymbols, setUseSymbols] = useState(true);
 
   const generateRandomString = (length) => {
+    const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+    const numberChars = "0123456789";
+    const symbolChars = "!@#$%^&*()*+,-./:;<=>?@";
+
+    let allChars = "";
+    if (useUppercase) allChars += uppercaseChars;
+    if (useLowercase) allChars += lowercaseChars;
+    if (useNumbers) allChars += numberChars;
+    if (useSymbols) allChars += symbolChars;
+
+    if (allChars === "") allChars = lowercaseChars;
+
     let result = "";
-    let characters = "";
-
-    if (useUppercase) characters += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    if (useLowercase) characters += "abcdefghijklmnopqrstuvwxyz";
-    if (useNumbers) characters += "0123456789";
-    if (useSymbols) characters += "!@#$%^&*()*+,-./:;<=>?@";
-
-    // Default to lowercase letters if no checkboxes are selected
-    if (characters === "") characters = "abcdefghijklmnopqrstuvwxyz";
-
-    for (let i = 0; i < length; i++) {
-      const randomInd = Math.floor(Math.random() * characters.length);
-      result += characters.charAt(randomInd);
+    while (result.length < length) {
+      const randomInd = Math.floor(Math.random() * allChars.length);
+      result += allChars.charAt(randomInd);
     }
+
     return result;
+  };
+
+  const validatePassword = (password) => {
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumbers = /[0-9]/.test(password);
+    const hasSymbols = /[!@#$%^&*()*+,-./:;<=>?@]/.test(password);
+
+    if (useUppercase && !hasUppercase) return false;
+    if (useLowercase && !hasLowercase) return false;
+    if (useNumbers && !hasNumbers) return false;
+    if (useSymbols && !hasSymbols) return false;
+
+    setUseUppercase(hasUppercase);
+    setUseLowercase(hasLowercase);
+    setUseNumbers(hasNumbers);
+    setUseSymbols(hasSymbols);
+
+    return true;
   };
 
   const handleGenerate = () => {
     const validatedLength = Math.max(8, Math.min(length, 20)); // Ensure length is between 8 and 20
-    const newString = generateRandomString(validatedLength);
+    let newString = generateRandomString(validatedLength);
+    while (!validatePassword(newString)) {
+      newString = generateRandomString(validatedLength);
+    }
     setRandomString(newString);
     setTextToCopy(newString);
   };
@@ -85,7 +112,15 @@ export default function Home() {
           </div>
         )}
 
+        {lengthErrorMessage && (
+          <div className="alert">
+            <p>{lengthErrorMessage}</p>
+          </div>
+        )}
+
         <div className="Password-holder">
+          <button onClick={handleGenerate}>Generate Password</button>
+
           <div className="Password-input">
             <input type="text" value={textToCopy} onChange={(e) => setTextToCopy(e.target.value)} />
           </div>
@@ -120,8 +155,6 @@ export default function Home() {
             <input type="checkbox" checked={useSymbols} onChange={handleSymbolsChange} />
           </div>
         </div>
-
-        <button onClick={handleGenerate}>Generate Password</button>
       </div>
     </div>
   );
